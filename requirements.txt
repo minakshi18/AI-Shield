@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 flask
 pandas
 numpy
@@ -6,13 +5,4 @@ nltk
 scikit-learn
 pytesseract
 Pillow
-=======
-flask
-pandas
-numpy
-nltk
-scikit-learn
-pytesseract
-Pillow
->>>>>>> origin/main
 gunicorn
