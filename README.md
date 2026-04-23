@@ -88,9 +88,6 @@ FakeNews_Project/
 ## Developers
 
 - Meenakshi Neolia
-- Parul Mishra
-- Priya Singh
-- Vyom Dixit
 
 ## License
 
