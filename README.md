@@ -85,7 +85,7 @@ FakeNews_Project/
 2. **Image Analysis**: Upload a screenshot of news for OCR extraction and analysis
 3. **Get Results**: Receive Real/Fake prediction with confidence percentage
 
-## Developers
+## Developer
 
 - Meenakshi Neolia
 
