@@ -9,11 +9,19 @@ import os
 from PIL import Image
 import pytesseract
 
+# --- NLTK Setup for Vercel ---
+nltk.data.path.append("/tmp")
+nltk.download('stopwords', download_dir="/tmp")
+
 app = Flask(__name__)
 
-# Load Models
-model = pickle.load(open('models/model.pkl', 'rb'))
-tfidf = pickle.load(open('models/vectorizer.pkl', 'rb'))
+# --- Load Models with Correct Paths ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, 'models', 'model.pkl')
+tfidf_path = os.path.join(BASE_DIR, 'models', 'vectorizer.pkl')
+
+model = pickle.load(open(model_path, 'rb'))
+tfidf = pickle.load(open(tfidf_path, 'rb'))
 
 ps = PorterStemmer()
 stop_words = set(stopwords.words('english'))
@@ -30,7 +38,6 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Check if it's an image upload or text input
     raw_text = ""
     if 'news_image' in request.files and request.files['news_image'].filename != '':
         img = Image.open(request.files['news_image'])
@@ -48,11 +55,9 @@ def predict():
     decision_score = model.decision_function(vectorized_text)[0]
     confidence = 1 / (1 + np.exp(-decision_score))
     
-    # Probability Logic
     prob_real = round((1 - confidence) * 100, 2) if prediction == 0 else round((1 - confidence) * 100, 2)
     prob_fake = 100 - prob_real
     
-    # Your Custom Status Logic
     status, color = "", ""
     display_prob = prob_real if prediction == 0 else prob_fake
     
@@ -66,6 +71,9 @@ def predict():
 
     return render_template('index.html', prediction=prediction, prob_real=prob_real, 
                            prob_fake=prob_fake, status=status, color=color, original_text=raw_text)
+
+# --- Vercel Specific ---
+app = app
 
 if __name__ == '__main__':
     app.run(debug=True)
